@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
+import android.widget.SeekBar
+import android.widget.TextView
 import java.io.File
 
 class SongListActivity : AppCompatActivity() {
@@ -11,15 +13,25 @@ class SongListActivity : AppCompatActivity() {
     private lateinit var listView:ListView
     private lateinit var arrayAdapter:SongListAdapter
 
-    private val songClickListener:View.OnClickListener = View.OnClickListener {
+    private val songClickListener:View.OnClickListener = View.OnClickListener { view ->
         println("Hey whats up")
 
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val fragment = MusicPlayerFragment()
+        val fragment = MusicPlayerFragment({ fragmentView ->
+            val songName = fragmentView.findViewById<TextView>(R.id.songPlayerSongName)
+            val songTime = fragmentView.findViewById<TextView>(R.id.songPlayerSongTime)
+            val songSeek = fragmentView.findViewById<SeekBar>(R.id.songSeekBar)
+
+            songName.text = view.findViewById<TextView>(R.id.songView).text
+            songTime.text = view.findViewById<TextView>(R.id.timeView).text
+        })
+
         fragmentTransaction.add(R.id.song_list_layout, fragment)
         fragmentTransaction.commit()
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
