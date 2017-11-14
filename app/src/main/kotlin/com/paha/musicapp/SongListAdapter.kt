@@ -25,7 +25,6 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var convertView = convertView
 
-
         // Get the data item for this position
         val dataModel = getItem(position)
         // Check if an existing view is being reused, otherwise inflate the view
@@ -60,27 +59,6 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
 //        convertView!!.isClickable = true
         convertView!!.setOnClickListener(clickListener)
 
-//        viewHolder.songName.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED)
-//        viewHolder.songTime.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-//        viewHolder.button.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED)
-//        convertView!!.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED)
-//
-//        val w1 = viewHolder.songName.measuredWidth
-//        val w2 = viewHolder.songTime.measuredWidth
-//        val w3 = viewHolder.button.measuredWidth
-//        val w5 = convertView.measuredWidth
-//
-//        val songTimeWidth = MainActivity.SCREEN_WIDTH - (widthOfSongName + 18 + convertView!!.height)
-//
-//        viewHolder.songName.width = widthOfSongName
-//        viewHolder.button.width = w3
-//        viewHolder.songTime.width = songTimeWidth
-
-//        viewHolder.button.layoutParams = ConstraintLayout.LayoutParams(viewHolder.button.height, viewHolder.button.height)
-
-//        viewHolder.txtVersion.setText(dataModel.getVersion_number())
-//        viewHolder.info.setOnClickListener(this)
-//        viewHolder.info.setTag(position)
         // Return the completed view to render on screen
         return convertView!!
     }
