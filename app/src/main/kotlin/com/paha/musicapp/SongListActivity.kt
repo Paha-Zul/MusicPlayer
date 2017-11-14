@@ -1,5 +1,7 @@
 package com.paha.musicapp
 
+import android.media.MediaPlayer
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -31,7 +33,12 @@ class SongListActivity : AppCompatActivity() {
         fragmentTransaction.add(R.id.song_list_layout, fragment)
         fragmentTransaction.commit()
 
-
+//        val myUri = Uri.parse(view.) // initialize Uri here
+//        val mediaPlayer = MediaPlayer();
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        mediaPlayer.setDataSource(getApplicationContext(), myUri);
+//        mediaPlayer.prepare();
+//        mediaPlayer.start();
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

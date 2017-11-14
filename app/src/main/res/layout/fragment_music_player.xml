@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent" android:layout_height="50dp"
-             android:layout_gravity="bottom"
-             android:layout_alignParentBottom="true"
-             android:layout_marginBottom="0dp"
-             android:stretchColumns="*"
-             android:background="@color/colorPrimaryDark"
-             tools:context="com.paha.musicapp.MusicPlayerFragment" android:id="@+id/musicPlayer_fragment"
-             android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:layout_gravity="bottom"
+              android:layout_alignParentBottom="true"
+              android:layout_marginBottom="0dp"
+              android:stretchColumns="*"
+              android:background="@color/colorPrimaryDark"
+              tools:context="com.paha.musicapp.MusicPlayerFragment" android:id="@+id/musicPlayer_fragment"
+              android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -19,13 +19,33 @@
         <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/songPlayerSongName" android:layout_weight="1"/>
+                android:layout_height="wrap_content" android:id="@+id/songPlayerSongName" android:layout_weight="1"
+                android:textSize="18sp"/>
         <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/songPlayerSongTime" android:layout_weight="1"/>
+                android:layout_height="wrap_content" android:id="@+id/songPlayerSongTime" android:layout_weight="1"
+                android:textSize="18sp" android:textAlignment="center"/>
     </LinearLayout>
     <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/songSeekBar"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/ic_skip_previous_black_48dp"
+                android:id="@+id/imageButton" android:layout_weight="1"/>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/ic_play_arrow_black_48dp"
+                android:id="@+id/imageButton2" android:layout_weight="1"
+        />
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/ic_skip_next_black_48dp"
+                android:id="@+id/imageButton3" android:layout_weight="1"/>
+    </LinearLayout>
 </LinearLayout>
