@@ -1,0 +1,19 @@
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent" android:layout_height="50dp"
+             android:layout_gravity="bottom"
+             android:layout_alignParentBottom="true"
+             android:layout_marginBottom="0dp"
+             tools:context="com.paha.musicapp.MusicPlayerFragment" android:id="@+id/musicPlayer_fragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="@string/hello_blank_fragment" android:id="@+id/textView2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" android:textAlignment="center"
+            android:textSize="24sp" android:textStyle="bold|italic" android:textAllCaps="false"/>
+
+</FrameLayout>
