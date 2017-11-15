@@ -17,13 +17,16 @@
             android:layout_weight="1.0"
             android:layout_height="0dp" android:id="@+id/songInfoLayout">
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="wrap_content"
+                android:maxLines="1"
                 android:layout_height="wrap_content" android:id="@+id/songPlayerSongName" android:layout_weight="1"
                 android:textSize="18sp"/>
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="wrap_content"
+                android:minWidth="200dp"
+                android:maxLines="1"
                 android:layout_height="wrap_content" android:id="@+id/songPlayerSongTime" android:layout_weight="1"
                 android:textSize="18sp" android:textAlignment="center"/>
     </LinearLayout>
@@ -37,15 +40,15 @@
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@drawable/ic_skip_previous_black_48dp"
-                android:id="@+id/imageButton" android:layout_weight="1"/>
+                android:id="@+id/previousSong" android:layout_weight="1"/>
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@drawable/ic_play_arrow_black_48dp"
-                android:id="@+id/imageButton2" android:layout_weight="1"
+                android:id="@+id/togglePlay" android:layout_weight="1"
         />
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@drawable/ic_skip_next_black_48dp"
-                android:id="@+id/imageButton3" android:layout_weight="1"/>
+                android:id="@+id/nextSong" android:layout_weight="1"/>
     </LinearLayout>
 </LinearLayout>

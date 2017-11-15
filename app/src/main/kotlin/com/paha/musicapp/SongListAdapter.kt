@@ -57,10 +57,10 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
         viewHolder.songTime.text = "3:20"
 
 //        convertView!!.isClickable = true
-        convertView!!.setOnClickListener(clickListener)
+        convertView!!.setOnClickListener(MusicInfoOnClickListener(context, dataModel))
 
         // Return the completed view to render on screen
-        return convertView!!
+        return convertView
     }
 
     override fun onClick(v: View) {

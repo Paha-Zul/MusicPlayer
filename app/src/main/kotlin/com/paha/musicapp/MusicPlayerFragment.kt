@@ -1,12 +1,17 @@
 package com.paha.musicapp
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import java.text.DecimalFormat
 
 
 /**
@@ -17,9 +22,8 @@ import android.view.ViewGroup
  * Use the [MusicPlayerFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MusicPlayerFragment(private val onCreateViewCallback:(view:View)->Unit) : android.app.Fragment() {
-
-    constructor() : this({})
+class MusicPlayerFragment(private val parentContext:Context?, private val onCreateViewCallback:(view:View)->Unit) : android.app.Fragment() {
+    constructor() : this(null, {})
 
     interface OnHeadlineSelectedListener {
         fun onArticleSelected(position: Int)
@@ -39,6 +43,7 @@ class MusicPlayerFragment(private val onCreateViewCallback:(view:View)->Unit) : 
             mParam1 = arguments.getString(ARG_PARAM1)
             mParam2 = arguments.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -46,6 +51,17 @@ class MusicPlayerFragment(private val onCreateViewCallback:(view:View)->Unit) : 
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_music_player, container, false)
         onCreateViewCallback(view)
+        view.findViewById<ImageButton>(R.id.previousSong).setOnClickListener { previousSong(it) }
+        view.findViewById<ImageButton>(R.id.nextSong).setOnClickListener { nextSong(it) }
+        val playButton = view.findViewById<ImageButton>(R.id.togglePlay)
+        playButton.setOnClickListener {
+            togglePlay(it)
+            if(mediaPlayer.isPlaying)
+                playButton.setImageResource(R.drawable.ic_pause_black_48dp)
+            else
+                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp)
+        }
+
         return view
     }
 
@@ -70,6 +86,48 @@ class MusicPlayerFragment(private val onCreateViewCallback:(view:View)->Unit) : 
         mListener = null
     }
 
+    fun playSong(context:Context, songFile:FileInfo){
+        val attributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+        val myUri = Uri.parse(songFile.file.path) // initialize Uri here
+        mediaPlayer.reset()
+
+        MusicPlayerFragment.mediaPlayer.setAudioAttributes(attributes)
+        mediaPlayer.setDataSource(context, myUri)
+        mediaPlayer.prepare()
+        mediaPlayer.start()
+
+        if(view != null) {
+            view.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.fileName
+            val playButton = view.findViewById<ImageButton>(R.id.togglePlay)
+            playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp)
+        }
+
+        currSongFile = songFile
+    }
+
+    private fun togglePlay(v:View):Unit{
+        if(mediaPlayer.isPlaying) mediaPlayer.pause()
+        else{
+            val length = mediaPlayer.currentPosition
+            mediaPlayer.start()
+            mediaPlayer.seekTo(length)
+        }
+    }
+
+    private fun previousSong(v:View){
+        val newSong = SongsUtil.getPreviousSong(currSongFile.fileName)
+        playSong(parentContext!!, newSong)
+    }
+
+    private fun nextSong(v:View){
+        val newSong = SongsUtil.getNextSong(currSongFile.fileName)
+        playSong(parentContext!!, newSong)
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -84,6 +142,11 @@ class MusicPlayerFragment(private val onCreateViewCallback:(view:View)->Unit) : 
     }
 
     companion object {
+        val mediaPlayer = MediaPlayer()
+        val format = DecimalFormat("00")
+
+        lateinit var currSongFile:FileInfo
+
         // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private val ARG_PARAM1 = "param1"

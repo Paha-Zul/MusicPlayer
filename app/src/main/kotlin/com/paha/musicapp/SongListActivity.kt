@@ -16,12 +16,10 @@ class SongListActivity : AppCompatActivity() {
     private lateinit var arrayAdapter:SongListAdapter
 
     private val songClickListener:View.OnClickListener = View.OnClickListener { view ->
-        println("Hey whats up")
-
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val fragment = MusicPlayerFragment({ fragmentView ->
+        val fragment = MusicPlayerFragment(this, { fragmentView ->
             val songName = fragmentView.findViewById<TextView>(R.id.songPlayerSongName)
             val songTime = fragmentView.findViewById<TextView>(R.id.songPlayerSongTime)
             val songSeek = fragmentView.findViewById<SeekBar>(R.id.songSeekBar)
@@ -47,33 +45,10 @@ class SongListActivity : AppCompatActivity() {
 
         listView = findViewById(R.id.listView) as ListView
 
-        val files = findFiles(File(getStorage()))
+        val files = SongsUtil.getAllSongs()
 
         arrayAdapter = SongListAdapter(this, files.toTypedArray(), songClickListener)
         listView.adapter = arrayAdapter
     }
 
-    private fun findFiles(dir: File):List<FileInfo>{
-        val children = dir.listFiles()
-
-        val mutableList:MutableList<FileInfo> = mutableListOf()
-        for (child in children) {
-            if(child.isDirectory){
-                mutableList.addAll(findFiles(child))
-            } else if(child.extension == "mp3")
-                mutableList += FileInfo(child, child.nameWithoutExtension)
-        }
-
-        return mutableList.toList()
-    }
-
-    private fun getStorage():String{
-        return when{
-            File("/storage/extSdCard/").exists() -> "/storage/extSdCard/"
-            File("/storage/sdcard1/").exists() -> "/storage/sdcard1/"
-            File("/storage/usbcard1/").exists() -> "/storage/usbcard1/"
-            File("/storage/sdcard0/").exists() -> "/storage/sdcard0/"
-            else -> ""
-        }
-    }
 }
