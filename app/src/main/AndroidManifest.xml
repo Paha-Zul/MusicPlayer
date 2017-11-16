@@ -27,7 +27,12 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".MainActivity"/>
         </activity>
-        <activity android:name=".SongListActivity">
+        <activity android:name=".activities.SongListActivity">
+        </activity>
+        <activity
+                android:name=".activities.SongDirectoryActivity"
+                android:label="@string/title_activity_song_directory"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

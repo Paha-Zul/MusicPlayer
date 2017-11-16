@@ -1,14 +1,33 @@
 package com.paha.musicapp
 
+import android.media.MediaMetadataRetriever
+import android.provider.MediaStore
 import java.io.File
 
 object SongsUtil {
     lateinit var shuffledSongs:List<FileInfo>
+    lateinit var songsByArtistMap:HashMap<String, MutableList<FileInfo>>
+    lateinit var songsByAlbumMap:HashMap<String, MutableList<FileInfo>>
 
     fun getAllSongs():List<FileInfo>{
         val files = findFiles(File(getStorage()))
         shuffledSongs = files.shuffle()
         return files
+    }
+
+    fun compileSongsByArtist(){
+        val dr = MediaMetadataRetriever()
+        songsByArtistMap = hashMapOf()
+        songsByAlbumMap = hashMapOf()
+
+        shuffledSongs.forEach { song ->
+            dr.setDataSource(song.file.path)
+            val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+
+            songsByArtistMap.getOrPut(artistName, { mutableListOf() }).add(song)
+            songsByAlbumMap.getOrPut(albumName, { mutableListOf() }).add(song)
+        }
     }
 
     fun getNextSong(currSong:String):FileInfo{

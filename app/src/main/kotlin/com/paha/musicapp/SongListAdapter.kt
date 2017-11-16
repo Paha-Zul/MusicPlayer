@@ -1,17 +1,20 @@
 package com.paha.musicapp
 
-import android.app.Activity
 import android.content.Context
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import com.paha.musicapp.fragments.MusicPlayerFragment
 
 
-class SongListAdapter(context:Context, val data:Array<FileInfo>, private val clickListener:View.OnClickListener)
-    : ArrayAdapter<FileInfo>(context, R.layout.simple_list, data), View.OnClickListener {
+class SongListAdapter(val parentContext:Context, private val fragmentManager:FragmentManager, val data:Array<FileInfo>)
+    : ArrayAdapter<FileInfo>(parentContext, R.layout.simple_list, data), View.OnClickListener {
 
     private var lastPosition:Int = 0
 
@@ -19,7 +22,7 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
     private class ViewHolder {
         internal lateinit var songName: TextView
         internal lateinit var songTime: TextView
-        internal lateinit var button: Button
+        internal lateinit var button: ImageButton
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -39,7 +42,7 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
             convertView = inflater.inflate(R.layout.simple_list, parent, false)
             viewHolder.songName = convertView.findViewById(R.id.songView)
             viewHolder.songTime = convertView.findViewById(R.id.timeView)
-            viewHolder.button = convertView.findViewById(R.id.button2)
+            viewHolder.button = convertView.findViewById(R.id.songOptionsButton)
 
             result = convertView
 
@@ -49,26 +52,19 @@ class SongListAdapter(context:Context, val data:Array<FileInfo>, private val cli
             result = convertView
         }
 
-//        val animation = AnimationUtils.loadAnimation(context, if (position > lastPosition) R.anim.up_from_bottom else R.anim.down_from_top)
-//        result.startAnimation(animation)
         lastPosition = position
 
         viewHolder.songName.text = dataModel.fileName
         viewHolder.songTime.text = "3:20"
 
-//        convertView!!.isClickable = true
-        convertView!!.setOnClickListener(MusicInfoOnClickListener(context, dataModel))
+        convertView!!.setOnClickListener(MusicInfoOnClickListener(fragmentManager, parentContext, dataModel))
 
         // Return the completed view to render on screen
         return convertView
     }
 
     override fun onClick(v: View) {
-//        val name = v.findViewById<TextView>(R.id.songView)
-//        val time = v.findViewById<TextView>(R.id.songView)
-//        val options = v.findViewById<Button>(R.id.button2)
-
-        val fragmentManager = (context as Activity).fragmentManager
+        val fragmentManager = (parentContext as AppCompatActivity).supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         val fragment = MusicPlayerFragment()

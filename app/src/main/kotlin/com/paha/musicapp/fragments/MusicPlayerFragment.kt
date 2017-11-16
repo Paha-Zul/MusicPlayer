@@ -1,4 +1,4 @@
-package com.paha.musicapp
+package com.paha.musicapp.fragments
 
 import android.content.Context
 import android.media.AudioAttributes
@@ -6,11 +6,16 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.math.MathUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.SeekBar
 import android.widget.TextView
+import com.paha.musicapp.FileInfo
+import com.paha.musicapp.R
+import com.paha.musicapp.SongsUtil
 import java.text.DecimalFormat
 
 
@@ -22,7 +27,7 @@ import java.text.DecimalFormat
  * Use the [MusicPlayerFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MusicPlayerFragment(private val parentContext:Context?, private val onCreateViewCallback:(view:View)->Unit) : android.app.Fragment() {
+class MusicPlayerFragment(private val parentContext:Context?, private val onCreateViewCallback:(view:View)->Unit) : Fragment() {
     constructor() : this(null, {})
 
     interface OnHeadlineSelectedListener {
@@ -43,23 +48,43 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
             mParam1 = arguments.getString(ARG_PARAM1)
             mParam2 = arguments.getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_music_player, container, false)
+
+        view.findViewById<TextView>(R.id.songPlayerSongTime).text = " 0:00/0:00 "
         onCreateViewCallback(view)
+
         view.findViewById<ImageButton>(R.id.previousSong).setOnClickListener { previousSong(it) }
         view.findViewById<ImageButton>(R.id.nextSong).setOnClickListener { nextSong(it) }
+        view.findViewById<ImageButton>(R.id.replay10).setOnClickListener { goBack10(it) }
+
+        val seekBar = view.findViewById<SeekBar>(R.id.songSeekBar)
+        seekBar.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                val value = (seekBar!!.progress/100f) * mediaPlayer.duration
+                mediaPlayer.seekTo(value.toInt())
+            }
+        })
+
         val playButton = view.findViewById<ImageButton>(R.id.togglePlay)
         playButton.setOnClickListener {
             togglePlay(it)
             if(mediaPlayer.isPlaying)
-                playButton.setImageResource(R.drawable.ic_pause_black_48dp)
+                playButton.setImageResource(R.drawable.ic_pause_white)
             else
-                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp)
+                playButton.setImageResource(R.drawable.ic_play_arrow_white_48dp)
         }
 
         return view
@@ -86,7 +111,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mListener = null
     }
 
-    fun playSong(context:Context, songFile:FileInfo){
+    fun playSong(context:Context, songFile: FileInfo){
         val attributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -95,15 +120,15 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         val myUri = Uri.parse(songFile.file.path) // initialize Uri here
         mediaPlayer.reset()
 
-        MusicPlayerFragment.mediaPlayer.setAudioAttributes(attributes)
+        mediaPlayer.setAudioAttributes(attributes)
         mediaPlayer.setDataSource(context, myUri)
         mediaPlayer.prepare()
         mediaPlayer.start()
 
         if(view != null) {
-            view.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.fileName
-            val playButton = view.findViewById<ImageButton>(R.id.togglePlay)
-            playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp)
+            view!!.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.fileName
+            val playButton = view!!.findViewById<ImageButton>(R.id.togglePlay)
+            playButton.setImageResource(R.drawable.ic_pause_white)
         }
 
         currSongFile = songFile
@@ -118,9 +143,18 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         }
     }
 
+    private fun goBack10(v:View){
+        //seek to 10 seconds (10000ms) before
+        mediaPlayer.seekTo(MathUtils.clamp(mediaPlayer.currentPosition - 10000, 0, mediaPlayer.duration))
+    }
+
     private fun previousSong(v:View){
         val newSong = SongsUtil.getPreviousSong(currSongFile.fileName)
         playSong(parentContext!!, newSong)
+    }
+
+    private fun seekTo(v:View){
+
     }
 
     private fun nextSong(v:View){
@@ -145,7 +179,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         val mediaPlayer = MediaPlayer()
         val format = DecimalFormat("00")
 
-        lateinit var currSongFile:FileInfo
+        lateinit var currSongFile: FileInfo
 
         // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

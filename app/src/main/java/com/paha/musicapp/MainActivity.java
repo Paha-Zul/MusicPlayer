@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
+import com.paha.musicapp.activities.SongDirectoryActivity;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.paha.musicapp";
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view){
-        Intent intent = new Intent(this, SongListActivity.class);
+        Intent intent = new Intent(this, SongDirectoryActivity.class);
         EditText editText = (EditText)findViewById(R.id.editText);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
