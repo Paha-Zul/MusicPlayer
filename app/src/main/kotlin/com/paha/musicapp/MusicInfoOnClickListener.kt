@@ -45,7 +45,7 @@ class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, priv
 
         fragment.playSong(context, songData)
 
-        fragmentTransaction.add(R.id.list_container, fragment)
+        fragmentTransaction.replace(R.id.music_player_container, fragment)
         fragmentTransaction.commit()
     }
 }

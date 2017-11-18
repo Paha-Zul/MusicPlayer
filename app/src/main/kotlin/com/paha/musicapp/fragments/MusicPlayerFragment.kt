@@ -1,5 +1,6 @@
 package com.paha.musicapp.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -10,9 +11,7 @@ import android.support.v4.math.MathUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import com.paha.musicapp.FileInfo
 import com.paha.musicapp.R
 import com.paha.musicapp.SongsUtil
@@ -29,12 +28,6 @@ import java.text.DecimalFormat
  */
 class MusicPlayerFragment(private val parentContext:Context?, private val onCreateViewCallback:(view:View)->Unit) : Fragment() {
     constructor() : this(null, {})
-
-    interface OnHeadlineSelectedListener {
-        fun onArticleSelected(position: Int)
-    }
-
-    val onSeekBarTouched = {}
 
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
@@ -82,12 +75,23 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         playButton.setOnClickListener {
             togglePlay(it)
             if(mediaPlayer.isPlaying)
-                playButton.setImageResource(R.drawable.ic_pause_white)
+                playButton.setBackgroundResource(R.drawable.ic_pause_white)
             else
-                playButton.setImageResource(R.drawable.ic_play_arrow_white_48dp)
+                playButton.setBackgroundResource(R.drawable.ic_play_arrow_white_48dp)
         }
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+//        val container = (parentContext!! as Activity).findViewById<FrameLayout>(R.id.music_player_container)
+//        view!!.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+//        val params = container.layoutParams
+//        params.height = view!!.measuredHeight
+//        params.width = view!!.measuredWidth
+//        container.layoutParams = params
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -128,7 +132,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         if(view != null) {
             view!!.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.fileName
             val playButton = view!!.findViewById<ImageButton>(R.id.togglePlay)
-            playButton.setImageResource(R.drawable.ic_pause_white)
+            playButton.setBackgroundResource(R.drawable.ic_pause_white)
         }
 
         currSongFile = songFile
