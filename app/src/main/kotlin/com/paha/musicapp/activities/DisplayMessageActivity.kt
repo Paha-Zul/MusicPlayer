@@ -1,8 +1,10 @@
-package com.paha.musicapp
+package com.paha.musicapp.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.paha.musicapp.MainActivity
+import com.paha.musicapp.R
 
 class DisplayMessageActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.paha.musicapp
+package com.paha.musicapp.listeners
 
 import android.content.Context
 import android.os.Handler
@@ -6,10 +6,12 @@ import android.support.v4.app.FragmentManager
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import com.paha.musicapp.objects.SongInfo
+import com.paha.musicapp.R
 import com.paha.musicapp.fragments.MusicPlayerFragment
-import com.paha.musicapp.fragments.SongListTab
+import com.paha.musicapp.fragments.AllSongsListTab
 
-class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, private val context:Context, private val songData:FileInfo) : View.OnClickListener {
+class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, private val context:Context, private val songData: SongInfo) : View.OnClickListener {
 
     override fun onClick(v: View) {
         println("Hey whats up")
@@ -19,7 +21,7 @@ class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, priv
         val format = MusicPlayerFragment.format
         val mediaPlayer = MusicPlayerFragment.mediaPlayer
 
-        val fragment = SongListTab.musicPlayerFragment ?: MusicPlayerFragment(context, { fragmentView ->
+        val fragment = AllSongsListTab.musicPlayerFragment ?: MusicPlayerFragment(context, { fragmentView ->
             val songName = fragmentView.findViewById<TextView>(R.id.songPlayerSongName)
             val songTime = fragmentView.findViewById<TextView>(R.id.songPlayerSongTime)
             val songSeek = fragmentView.findViewById<SeekBar>(R.id.songSeekBar)

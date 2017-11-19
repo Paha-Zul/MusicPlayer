@@ -28,6 +28,9 @@ android {
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url 'https://mvnrepository.com/artifact/xuggle/xuggle-xuggler'
+    }
 }
 
 dependencies {
@@ -36,6 +39,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile group: 'org', name: 'jaudiotagger', version: '2.0.3'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'org.jetbrains.kotlin:kotlin-stdlib:+'

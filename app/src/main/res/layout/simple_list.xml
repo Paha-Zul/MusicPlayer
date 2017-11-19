@@ -50,10 +50,10 @@
             android:layout_marginEnd="10dp"
             android:layout_weight="0" android:id="@+id/timeView" android:textAlignment="textStart"/>
     <ImageButton
-            app:srcCompat="@drawable/ic_more_horiz_black_24dp"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             style="?android:attr/borderlessButtonStyle"
             android:layout_marginEnd="5dp"
-            android:id="@+id/songOptionsButton" android:layout_weight="0"/>
+            android:id="@+id/songOptionsButton" android:layout_weight="0"
+            android:background="@drawable/ic_more_vert_white_48dp" android:backgroundTint="@android:color/darker_gray"/>
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.paha.musicapp.fragments
 
-import android.app.Activity
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -12,9 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.paha.musicapp.FileInfo
+import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.R
-import com.paha.musicapp.SongsUtil
+import com.paha.musicapp.util.SongsUtil
 import java.text.DecimalFormat
 
 
@@ -115,7 +114,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mListener = null
     }
 
-    fun playSong(context:Context, songFile: FileInfo){
+    fun playSong(context:Context, songFile: SongInfo){
         val attributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -183,7 +182,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         val mediaPlayer = MediaPlayer()
         val format = DecimalFormat("00")
 
-        lateinit var currSongFile: FileInfo
+        lateinit var currSongFile: SongInfo
 
         // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

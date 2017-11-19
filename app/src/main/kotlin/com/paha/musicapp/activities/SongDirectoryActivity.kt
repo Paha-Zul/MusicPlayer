@@ -2,8 +2,6 @@ package com.paha.musicapp.activities
 
 import android.net.Uri
 import android.support.design.widget.TabLayout
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 
@@ -21,7 +19,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.paha.musicapp.R
 import com.paha.musicapp.fragments.MusicPlayerFragment
-import com.paha.musicapp.fragments.SongListTab
+import com.paha.musicapp.fragments.AllSongsListTab
+import com.paha.musicapp.fragments.SongsByAlbumTab
+import com.paha.musicapp.fragments.SongsByArtistTab
+import com.paha.musicapp.tasks.LoadSongsTask
 
 class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmentInteractionListener {
 
@@ -56,6 +57,8 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 
         val tabLayout = findViewById(R.id.tabs) as TabLayout
         tabLayout.setupWithViewPager(mViewPager)
+
+        LoadSongsTask().execute("")
 
 //        val fab = findViewById(R.id.fab) as FloatingActionButton
 //        fab.setOnClickListener { view ->
@@ -131,7 +134,9 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 
         override fun getItem(position: Int): Fragment {
             when(position){
-                0 -> return SongListTab()
+                0 -> return AllSongsListTab()
+                1 -> return SongsByArtistTab()
+                2 -> return SongsByAlbumTab()
             }
 
             // getItem is called to instantiate the fragment for the given page.
