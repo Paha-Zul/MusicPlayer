@@ -47,6 +47,7 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+        toolbar.title = "Cool"
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -151,9 +152,9 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 
         override fun getPageTitle(position: Int): CharSequence? {
             when (position) {
-                0 -> return "SECTION 1"
-                1 -> return "SECTION 2"
-                2 -> return "SECTION 3"
+                0 -> return "All"
+                1 -> return "Artist"
+                2 -> return "Album"
             }
             return null
         }
