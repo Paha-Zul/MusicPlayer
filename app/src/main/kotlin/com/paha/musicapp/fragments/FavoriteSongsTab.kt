@@ -2,11 +2,9 @@ package com.paha.musicapp.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ListView
 import android.widget.ProgressBar
 import com.paha.musicapp.R
@@ -16,7 +14,7 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
 
-class AllSongsListTab : Fragment(), SongDataLoaded{
+class FavoriteSongsTab : Fragment(), SongDataLoaded{
     init{
         LoadSongsTask.listeners += this
     }
@@ -38,7 +36,7 @@ class AllSongsListTab : Fragment(), SongDataLoaded{
         if(allSongs.isEmpty() || view == null)
             return
 
-        arrayAdapter = SongListAdapter(activity, fragmentManager, allSongs.toTypedArray())
+        arrayAdapter = SongListAdapter(activity, fragmentManager, SongsUtil.favoriteSongs.toTypedArray())
         val listView = view!!.findViewById<ListView>(R.id.all_songs_list_view)
         listView.adapter = arrayAdapter
 

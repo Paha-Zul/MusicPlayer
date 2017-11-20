@@ -18,10 +18,7 @@ import android.view.ViewGroup
 
 import android.widget.TextView
 import com.paha.musicapp.R
-import com.paha.musicapp.fragments.MusicPlayerFragment
-import com.paha.musicapp.fragments.AllSongsListTab
-import com.paha.musicapp.fragments.SongsByAlbumTab
-import com.paha.musicapp.fragments.SongsByArtistTab
+import com.paha.musicapp.fragments.*
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
 
@@ -36,6 +33,10 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+
+    companion object {
+        var musicPlayerFragment: MusicPlayerFragment? = null
+    }
 
     /**
      * The [ViewPager] that will host the section contents.
@@ -143,6 +144,7 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
                 0 -> return AllSongsListTab()
                 1 -> return SongsByArtistTab()
                 2 -> return SongsByAlbumTab()
+                3 -> return FavoriteSongsTab()
             }
 
             // getItem is called to instantiate the fragment for the given page.
@@ -150,16 +152,14 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
             return PlaceholderFragment.newInstance(position + 1)
         }
 
-        override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
-        }
+        override fun getCount(): Int = 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             when (position) {
                 0 -> return "All"
                 1 -> return "Artist"
                 2 -> return "Album"
+                3 -> return "Favorites"
             }
             return null
         }
