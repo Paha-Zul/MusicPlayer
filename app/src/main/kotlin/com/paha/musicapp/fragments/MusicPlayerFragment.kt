@@ -79,6 +79,20 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
                 playButton.setBackgroundResource(R.drawable.ic_play_arrow_white_48dp)
         }
 
+        val favoriteButton = view.findViewById<ImageButton>(R.id.favorite_button)
+        val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.fileName == currSongFile.fileName } != null
+        val background = if(isFavorite) R.drawable.ic_favorite_white_48dp else R.drawable.ic_favorite_border_white_48dp
+        favoriteButton.setBackgroundResource(background)
+        favoriteButton.setOnClickListener {
+            if(isFavorite){
+                toggleFavoriteSong(view, false)
+                favoriteButton.setBackgroundResource(R.drawable.ic_favorite_border_white_48dp)
+            }else{
+                toggleFavoriteSong(view, true)
+                favoriteButton.setBackgroundResource(R.drawable.ic_favorite_white_48dp)
+            }
+        }
+
         return view
     }
 
@@ -120,7 +134,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build()
 
-        val myUri = Uri.parse(songFile.file.path) // initialize Uri here
+        val myUri = Uri.parse(songFile.filePath) // initialize Uri here
         mediaPlayer.reset()
 
         mediaPlayer.setAudioAttributes(attributes)
@@ -154,6 +168,13 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     private fun previousSong(v:View){
         val newSong = SongsUtil.getPreviousSong(currSongFile.fileName)
         playSong(parentContext!!, newSong)
+    }
+
+    private fun toggleFavoriteSong(v:View, setAsFavorite:Boolean){
+        if(setAsFavorite)
+            SongsUtil.favoriteSongs.add(currSongFile)
+        else
+            SongsUtil.favoriteSongs.removeAll { it.fileName == currSongFile.fileName }
     }
 
     private fun seekTo(v:View){

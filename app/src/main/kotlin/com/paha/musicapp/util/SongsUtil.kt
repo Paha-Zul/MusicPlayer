@@ -2,17 +2,17 @@ package com.paha.musicapp.util
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.shuffle
-import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.tag.FieldKey
-import java.io.File
+import java.io.*
 
 
 object SongsUtil {
     var shuffledSongs:List<SongInfo> = listOf()
     var songsByArtistMap:HashMap<String, List<SongInfo>> = hashMapOf()
     var songsByAlbumMap:HashMap<String, List<SongInfo>> = hashMapOf()
+    var favoriteSongs:MutableList<SongInfo> = mutableListOf()
 
     fun getAllSongs():List<SongInfo>{
         val files = findFiles(File(getStorage()))
@@ -27,10 +27,10 @@ object SongsUtil {
         val albumMap = hashMapOf<String, MutableList<SongInfo>>()
 
         shuffledSongs.forEach { song ->
-            val audio = AudioFileIO.read(song.file)
-            val tag = audio.tag
+//            val audio = AudioFileIO.read(File(song.filePath))
+//            val tag = audio.tag
 
-            dr.setDataSource(song.file.path, hashMapOf())
+            dr.setDataSource(song.filePath, hashMapOf())
             val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
             val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: "unknown"
             val albumArtist = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST) ?: "unknown"
@@ -57,6 +57,62 @@ object SongsUtil {
         for (entry in albumMap) {
             songsByAlbumMap.put(entry.key, entry.value.toList())
         }
+    }
+
+    fun loadFavoriteSongs(context:Context){
+        var data = ""
+
+        try {
+            val inputStream = context.openFileInput("config.txt")
+
+            if (inputStream != null) {
+                val inputStreamReader = InputStreamReader(inputStream)
+                val bufferedReader = BufferedReader(inputStreamReader)
+                val stringBuilder = StringBuilder()
+
+                val receiveString = bufferedReader.readLine()
+                stringBuilder.append(receiveString)
+
+//                while (receiveString != null) {
+//                    stringBuilder.append(receiveString)
+//                    receiveString = bufferedReader.readLine()
+//                }
+
+                inputStream.close()
+                data = stringBuilder.toString()
+            }
+        } catch (e: FileNotFoundException) {
+            Log.e("login activity", "File not found: " + e.toString())
+        } catch (e: IOException) {
+            Log.e("login activity", "Can not read file: " + e.toString())
+        }
+
+        //Split the data into their separate parts
+        val songData = data.split(';')
+        if(songData.size == 1 && songData[0].isEmpty())
+            return
+
+        songData.forEach { //For each piece of data, split it into the song path and the song name
+            if(it != "null" && it.isNotEmpty()) {
+                val parts = it.split(':')
+                if(parts.size > 1)
+                    favoriteSongs.add(SongInfo(parts[1], parts[0])) //The data will be in songName:songFile format
+            }
+        }
+    }
+
+    fun saveFavorites(context:Context){
+        try {
+            var songData = ""
+            favoriteSongs.forEachIndexed { index, songInfo ->
+                songData += "${songInfo.fileName}:${songInfo.filePath}${if(index < favoriteSongs.size-1) ";" else ""}" }
+
+            val outputStreamWriter = OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE))
+            outputStreamWriter.write(songData)
+            outputStreamWriter.close()
+        } catch (e: IOException) {
+            Log.e("Exception", "File write failed: " + e.toString())
+        }
 
     }
 
@@ -80,7 +136,7 @@ object SongsUtil {
             if(child.isDirectory){
                 mutableList.addAll(findFiles(child))
             } else if(child.extension == "mp3")
-                mutableList += SongInfo(child, child.nameWithoutExtension)
+                mutableList += SongInfo(child.path, child.nameWithoutExtension)
         }
 
         return mutableList.toList()

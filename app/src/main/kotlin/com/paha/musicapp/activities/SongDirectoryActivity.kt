@@ -23,6 +23,7 @@ import com.paha.musicapp.fragments.AllSongsListTab
 import com.paha.musicapp.fragments.SongsByAlbumTab
 import com.paha.musicapp.fragments.SongsByArtistTab
 import com.paha.musicapp.tasks.LoadSongsTask
+import com.paha.musicapp.util.SongsUtil
 
 class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmentInteractionListener {
 
@@ -59,16 +60,20 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
         val tabLayout = findViewById(R.id.tabs) as TabLayout
         tabLayout.setupWithViewPager(mViewPager)
 
-        LoadSongsTask().execute("")
+        LoadSongsTask().execute(this)
 
 //        val fab = findViewById(R.id.fab) as FloatingActionButton
 //        fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show()
 //        }
-
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        SongsUtil.saveFavorites(this)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

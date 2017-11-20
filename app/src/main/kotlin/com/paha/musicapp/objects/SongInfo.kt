@@ -2,7 +2,7 @@ package com.paha.musicapp.objects
 
 import java.io.File
 
-data class SongInfo(val file: File, val fileName:String) {
+data class SongInfo(val filePath: String, val fileName:String) {
     var artisName = ""
     var albumName = ""
 
