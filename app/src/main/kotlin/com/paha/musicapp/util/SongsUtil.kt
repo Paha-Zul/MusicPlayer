@@ -105,7 +105,7 @@ object SongsUtil {
         try {
             var songData = ""
             favoriteSongs.forEachIndexed { index, songInfo ->
-                songData += "${songInfo.fileName}:${songInfo.filePath}${if(index < favoriteSongs.size-1) ";" else ""}" }
+                songData += "${songInfo.songName}:${songInfo.filePath}${if(index < favoriteSongs.size-1) ";" else ""}" }
 
             val outputStreamWriter = OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE))
             outputStreamWriter.write(songData)
@@ -117,13 +117,13 @@ object SongsUtil {
     }
 
     fun getNextSong(currSong:String): SongInfo {
-        var index = shuffledSongs.indexOfLast { it.fileName == currSong }
+        var index = shuffledSongs.indexOfLast { it.songName == currSong }
         index = (index+1) % shuffledSongs.size
         return shuffledSongs[index]
     }
 
     fun getPreviousSong(currSong:String): SongInfo {
-        var index = shuffledSongs.indexOfLast { it.fileName == currSong }
+        var index = shuffledSongs.indexOfLast { it.songName == currSong }
         index = (index-1) % shuffledSongs.size
         return shuffledSongs[index]
     }

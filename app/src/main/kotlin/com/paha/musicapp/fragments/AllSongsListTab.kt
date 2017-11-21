@@ -6,7 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ListView
 import android.widget.ProgressBar
 import com.paha.musicapp.R
@@ -38,10 +39,12 @@ class AllSongsListTab : Fragment(), SongDataLoaded{
         if(allSongs.isEmpty() || view == null)
             return
 
-        arrayAdapter = SongListAdapter(activity, fragmentManager, allSongs.toTypedArray())
+        arrayAdapter = SongListAdapter(activity, fragmentManager, allSongs.toMutableList())
         val listView = view!!.findViewById<ListView>(R.id.all_songs_list_view)
         listView.adapter = arrayAdapter
 
         view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.GONE
     }
+
+
 }

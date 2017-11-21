@@ -1,12 +1,10 @@
 package com.paha.musicapp.objects
 
-import java.io.File
-
-data class SongInfo(val filePath: String, val fileName:String) {
+data class SongInfo(val filePath: String, val songName:String) {
     var artisName = ""
     var albumName = ""
 
     override fun toString(): String {
-        return fileName
+        return songName
     }
 }

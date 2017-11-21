@@ -36,7 +36,7 @@ class FavoriteSongsTab : Fragment(), SongDataLoaded{
         if(allSongs.isEmpty() || view == null)
             return
 
-        arrayAdapter = SongListAdapter(activity, fragmentManager, SongsUtil.favoriteSongs.toTypedArray())
+        arrayAdapter = SongListAdapter(activity, fragmentManager, SongsUtil.favoriteSongs.toMutableList())
         val listView = view!!.findViewById<ListView>(R.id.all_songs_list_view)
         listView.adapter = arrayAdapter
 

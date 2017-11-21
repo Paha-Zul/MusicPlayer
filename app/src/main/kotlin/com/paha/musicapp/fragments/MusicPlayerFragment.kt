@@ -80,7 +80,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         }
 
         val favoriteButton = view.findViewById<ImageButton>(R.id.favorite_button)
-        val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.fileName == currSongFile.fileName } != null
+        val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
         val background = if(isFavorite) R.drawable.ic_favorite_white_48dp else R.drawable.ic_favorite_border_white_48dp
         favoriteButton.setBackgroundResource(background)
         favoriteButton.setOnClickListener {
@@ -143,7 +143,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mediaPlayer.start()
 
         if(view != null) {
-            view!!.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.fileName
+            view!!.findViewById<TextView>(R.id.songPlayerSongName).text = songFile.songName
             val playButton = view!!.findViewById<ImageButton>(R.id.togglePlay)
             playButton.setBackgroundResource(R.drawable.ic_pause_white)
         }
@@ -166,7 +166,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     private fun previousSong(v:View){
-        val newSong = SongsUtil.getPreviousSong(currSongFile.fileName)
+        val newSong = SongsUtil.getPreviousSong(currSongFile.songName)
         playSong(parentContext!!, newSong)
     }
 
@@ -174,7 +174,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         if(setAsFavorite)
             SongsUtil.favoriteSongs.add(currSongFile)
         else
-            SongsUtil.favoriteSongs.removeAll { it.fileName == currSongFile.fileName }
+            SongsUtil.favoriteSongs.removeAll { it.songName == currSongFile.songName }
     }
 
     private fun seekTo(v:View){
@@ -182,7 +182,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     private fun nextSong(v:View){
-        val newSong = SongsUtil.getNextSong(currSongFile.fileName)
+        val newSong = SongsUtil.getNextSong(currSongFile.songName)
         playSong(parentContext!!, newSong)
     }
 

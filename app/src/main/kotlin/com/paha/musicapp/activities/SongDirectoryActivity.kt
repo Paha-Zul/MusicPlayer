@@ -1,5 +1,6 @@
 package com.paha.musicapp.activities
 
+import android.content.Context
 import android.net.Uri
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
@@ -10,17 +11,26 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.ListView
 
 import android.widget.TextView
 import com.paha.musicapp.R
+import com.paha.musicapp.adapaters.SongListAdapter
 import com.paha.musicapp.fragments.*
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
+import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+
+
 
 class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmentInteractionListener {
 
@@ -49,7 +59,7 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        toolbar.title = "Cool"
+        supportActionBar!!.title = "Wassup"
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -62,6 +72,28 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
         tabLayout.setupWithViewPager(mViewPager)
 
         LoadSongsTask().execute(this)
+
+        //A text change listener for the search bar
+        val searchBar = findViewById(R.id.search_bar) as EditText
+        searchBar.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                mViewPager!!.setCurrentItem(0, false) //Immediately change to the all songs view
+                val allSongs = findViewById(R.id.all_songs_list_view) as ListView
+                (allSongs.adapter as SongListAdapter).filter.filter(s)
+            }
+        })
+
+        //We don't really want any EditTexts getting focus, so try to get focus here.
+        findViewById(R.id.toolbar).requestFocus()
+
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(this.currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
 //        val fab = findViewById(R.id.fab) as FloatingActionButton
 //        fab.setOnClickListener { view ->
@@ -159,7 +191,7 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
                 0 -> return "All"
                 1 -> return "Artist"
                 2 -> return "Album"
-                3 -> return "Favorites"
+                3 -> return "Faves"
             }
             return null
         }
