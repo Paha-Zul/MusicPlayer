@@ -28,8 +28,6 @@ import com.paha.musicapp.adapaters.SongListAdapter
 import com.paha.musicapp.fragments.*
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
-import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
-
 
 
 class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmentInteractionListener {
@@ -60,6 +58,7 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Wassup"
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)

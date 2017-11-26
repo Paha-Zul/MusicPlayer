@@ -9,8 +9,6 @@ import com.paha.musicapp.util.SongsUtil
 
 class SongListActivity : AppCompatActivity() {
 
-
-
     private lateinit var listView:ListView
     private lateinit var arrayAdapter: SongListAdapter
 
@@ -20,7 +18,7 @@ class SongListActivity : AppCompatActivity() {
 
         listView = findViewById(R.id.all_songs_list_view) as ListView
 
-        val files = SongsUtil.getAllSongs()
+        val files = SongsUtil.loadAllSongs()
 
 //        arrayAdapter = SongListAdapter(this,  files.toTypedArray())
         listView.adapter = arrayAdapter

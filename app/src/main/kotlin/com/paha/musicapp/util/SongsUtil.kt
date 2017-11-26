@@ -7,16 +7,17 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.shuffle
 import java.io.*
 
-
 object SongsUtil {
-    var shuffledSongs:List<SongInfo> = listOf()
+    var allSongs:List<SongInfo> = listOf()
     var songsByArtistMap:HashMap<String, List<SongInfo>> = hashMapOf()
     var songsByAlbumMap:HashMap<String, List<SongInfo>> = hashMapOf()
     var favoriteSongs:MutableList<SongInfo> = mutableListOf()
 
-    fun getAllSongs():List<SongInfo>{
+
+
+    fun loadAllSongs():List<SongInfo>{
         val files = findFiles(File(getStorage()))
-        shuffledSongs = files.shuffle()
+        allSongs = files
         return files
     }
 
@@ -26,18 +27,16 @@ object SongsUtil {
         val artistMap = hashMapOf<String, MutableList<SongInfo>>()
         val albumMap = hashMapOf<String, MutableList<SongInfo>>()
 
-        shuffledSongs.forEach { song ->
+        allSongs.forEach { song ->
 //            val audio = AudioFileIO.read(File(song.filePath))
 //            val tag = audio.tag
+            val file = File(song.filePath)
 
             dr.setDataSource(song.filePath, hashMapOf())
             val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
-            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: "unknown"
+            //If we don't have an album name, use the parent's name (a folder that is probably named the album)
+            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: file.parentFile.name
             val albumArtist = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST) ?: "unknown"
-//
-//            val artistName = tag.getFirst(FieldKey.ARTIST) ?: "unknown"
-//            val albumName = tag.getFirst(FieldKey.ALBUM) ?: "unknown"
-//            val albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST) ?: "unknown"
 
             song.artisName = artistName
             song.albumName = albumName
@@ -117,16 +116,18 @@ object SongsUtil {
     }
 
     fun getNextSong(currSong:String): SongInfo {
-        var index = shuffledSongs.indexOfLast { it.songName == currSong }
-        index = (index+1) % shuffledSongs.size
-        return shuffledSongs[index]
+        var index = allSongs.indexOfLast { it.songName == currSong }
+        index = (index+1) % allSongs.size
+        return allSongs[index]
     }
 
     fun getPreviousSong(currSong:String): SongInfo {
-        var index = shuffledSongs.indexOfLast { it.songName == currSong }
-        index = (index-1) % shuffledSongs.size
-        return shuffledSongs[index]
+        var index = allSongs.indexOfLast { it.songName == currSong }
+        index = (index-1) % allSongs.size
+        return allSongs[index]
     }
+
+
 
     private fun findFiles(dir: File):List<SongInfo>{
         val children = dir.listFiles()

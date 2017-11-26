@@ -17,10 +17,6 @@ class DisplayMessageActivity : AppCompatActivity() {
 
         val textView: TextView = findViewById(R.id.textView) as TextView
         textView.text = message
-
-        println("Hi")
-
-//        println("Files found: ${findFiles(File(getStorage()))}")
     }
 
 

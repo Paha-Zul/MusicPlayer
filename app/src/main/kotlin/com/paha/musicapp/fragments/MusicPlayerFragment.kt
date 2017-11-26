@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.math.MathUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.R
+import com.paha.musicapp.util.PlaylistUtil
 import com.paha.musicapp.util.SongsUtil
 import java.text.DecimalFormat
 
@@ -33,6 +35,8 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     private var mParam2: String? = null
 
     private var mListener: OnFragmentInteractionListener? = null
+
+    var shuffled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +83,15 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
                 playButton.setBackgroundResource(R.drawable.ic_play_arrow_white_48dp)
         }
 
+        val shuffleButton = view.findViewById<ImageButton>(R.id.shuffle_playlist)
+        shuffleButton.setOnClickListener {
+            shuffled = !shuffled
+            if(shuffled)
+                shuffleButton.backgroundTintList = ContextCompat.getColorStateList(context, R.color.maroon)
+            else
+                shuffleButton.backgroundTintList = ContextCompat.getColorStateList(context, R.color.white)
+        }
+
         val favoriteButton = view.findViewById<ImageButton>(R.id.favorite_button)
         val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
         val background = if(isFavorite) R.drawable.ic_favorite_white_48dp else R.drawable.ic_favorite_border_white_48dp
@@ -99,12 +112,11 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     override fun onStart() {
         super.onStart()
 
-//        val container = (parentContext!! as Activity).findViewById<FrameLayout>(R.id.music_player_container)
-//        view!!.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-//        val params = container.layoutParams
-//        params.height = view!!.measuredHeight
-//        params.width = view!!.measuredWidth
-//        container.layoutParams = params
+        mediaPlayer.setOnCompletionListener {
+            //TODO Don't leave "all" here. Find a way to differentiate playlists
+            val song = PlaylistUtil.getNextSongInPlaylist(currSongFile.songName, "all", shuffled, false)
+            playSong(song)
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -128,7 +140,10 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mListener = null
     }
 
-    fun playSong(context:Context, songFile: SongInfo){
+    fun playSong(songFile: SongInfo){
+
+//        PlaylistUtil.startPlaylist("all", shuffled)
+
         val attributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -166,8 +181,8 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     private fun previousSong(v:View){
-        val newSong = SongsUtil.getPreviousSong(currSongFile.songName)
-        playSong(parentContext!!, newSong)
+        val newSong = PlaylistUtil.getNextSongInPlaylist(currSongFile.songName, "all", shuffled, true)
+        playSong(newSong)
     }
 
     private fun toggleFavoriteSong(v:View, setAsFavorite:Boolean){
@@ -177,13 +192,9 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
             SongsUtil.favoriteSongs.removeAll { it.songName == currSongFile.songName }
     }
 
-    private fun seekTo(v:View){
-
-    }
-
     private fun nextSong(v:View){
-        val newSong = SongsUtil.getNextSong(currSongFile.songName)
-        playSong(parentContext!!, newSong)
+        val newSong = PlaylistUtil.getNextSongInPlaylist(currSongFile.songName, "all", shuffled, false)
+        playSong(newSong)
     }
 
     /**

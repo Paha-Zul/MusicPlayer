@@ -2,12 +2,9 @@ package com.paha.musicapp.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ListView
 import android.widget.ProgressBar
 import com.paha.musicapp.R
@@ -32,7 +29,7 @@ class AllSongsListTab : Fragment(), SongDataLoaded{
     override fun onStart() {
         super.onStart()
         view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.VISIBLE
-        onSongDataLoaded(SongsUtil.shuffledSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)
+        onSongDataLoaded(SongsUtil.allSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)
     }
 
     override fun onSongDataLoaded(allSongs: List<SongInfo>, songsByArtist: HashMap<String, List<SongInfo>>, songsByAlbum: HashMap<String, List<SongInfo>>) {
