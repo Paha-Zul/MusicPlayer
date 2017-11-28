@@ -2,10 +2,15 @@ package com.paha.musicapp.util
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.shuffle
 import java.io.*
+import android.os.Environment.getExternalStorageDirectory
+
+
 
 object SongsUtil {
     var allSongs:List<SongInfo> = listOf()
@@ -130,7 +135,7 @@ object SongsUtil {
 
 
     private fun findFiles(dir: File):List<SongInfo>{
-        val children = dir.listFiles()
+        val children = dir.listFiles() ?: return listOf()
 
         val mutableList:MutableList<SongInfo> = mutableListOf()
         for (child in children) {
@@ -148,6 +153,15 @@ object SongsUtil {
         File("/storage/sdcard1/").exists() -> "/storage/sdcard1/"
         File("/storage/usbcard1/").exists() -> "/storage/usbcard1/"
         File("/storage/sdcard0/").exists() -> "/storage/sdcard0/"
-        else -> ""
+        else -> {
+            var removableStoragePath: String = ""
+            val fileList = File("/storage/").listFiles()
+            for (file in fileList) {
+                if (!file.absolutePath.equals(Environment.getExternalStorageDirectory().absolutePath, true) && file.isDirectory && file.canRead())
+                    removableStoragePath = file.absolutePath
+            }
+
+            removableStoragePath
+        }
     }
 }
