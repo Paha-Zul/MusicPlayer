@@ -10,7 +10,7 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.R
 import com.paha.musicapp.activities.SongDirectoryActivity
 import com.paha.musicapp.fragments.MusicPlayerFragment
-import com.paha.musicapp.fragments.AllSongsListTab
+import com.paha.musicapp.util.PlaylistUtil
 
 class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, private val context:Context, private val songData: SongInfo) : View.OnClickListener {
 
@@ -46,7 +46,8 @@ class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, priv
             handler.postDelayed(runnable, 500)
         })
 
-        fragment.playSong(context, songData)
+        PlaylistUtil.FindSongAndSetPlaylistIndex(songData.songName, "all", fragment.shuffled)
+        fragment.playSong(songData)
 
         fragmentTransaction.replace(R.id.music_player_container, fragment)
         fragmentTransaction.commit()

@@ -29,7 +29,7 @@ class FavoriteSongsTab : Fragment(), SongDataLoaded{
     override fun onStart() {
         super.onStart()
         view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.VISIBLE
-        onSongDataLoaded(SongsUtil.shuffledSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)
+        onSongDataLoaded(SongsUtil.allSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)
     }
 
     override fun onSongDataLoaded(allSongs: List<SongInfo>, songsByArtist: HashMap<String, List<SongInfo>>, songsByAlbum: HashMap<String, List<SongInfo>>) {

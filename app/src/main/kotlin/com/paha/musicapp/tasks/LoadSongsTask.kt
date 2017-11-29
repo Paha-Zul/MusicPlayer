@@ -12,7 +12,7 @@ class LoadSongsTask : AsyncTask<Any, String, List<SongInfo>>() {
     }
 
     override fun doInBackground(vararg params: Any?): List<SongInfo> {
-        val files = SongsUtil.getAllSongs()
+        val files = SongsUtil.loadAllSongs()
         SongsUtil.compileSongsIntoCategories()
         SongsUtil.loadFavoriteSongs(params[0] as Context)
         return files
@@ -24,6 +24,6 @@ class LoadSongsTask : AsyncTask<Any, String, List<SongInfo>>() {
 
     override fun onPostExecute(result: List<SongInfo>) {
         super.onPostExecute(result)
-        listeners.forEach{it.onSongDataLoaded(SongsUtil.shuffledSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)}
+        listeners.forEach{it.onSongDataLoaded(SongsUtil.allSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)}
     }
 }
