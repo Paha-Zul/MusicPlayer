@@ -9,7 +9,9 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.shuffle
 import java.io.*
 import android.os.Environment.getExternalStorageDirectory
-
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 
 
 object SongsUtil {
@@ -27,21 +29,26 @@ object SongsUtil {
     }
 
     fun compileSongsIntoCategories(){
-        val dr = MediaMetadataRetriever()
+//        val dr = MediaMetadataRetriever()
 
         val artistMap = hashMapOf<String, MutableList<SongInfo>>()
         val albumMap = hashMapOf<String, MutableList<SongInfo>>()
 
         allSongs.forEach { song ->
-//            val audio = AudioFileIO.read(File(song.filePath))
-//            val tag = audio.tag
+            val audio = AudioFileIO.read(File(song.filePath))
+            val tag = audio.tag
             val file = File(song.filePath)
 
-            dr.setDataSource(song.filePath, hashMapOf())
-            val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
+//            dr.setDataSource(song.filePath, hashMapOf())
+//            val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
+//            //If we don't have an album name, use the parent's name (a folder that is probably named the album)
+//            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: file.parentFile.name
+//            val albumArtist = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST) ?: "unknown"
+
+            val artistName = tag.getFirst(FieldKey.ARTIST) ?: "unknown"
             //If we don't have an album name, use the parent's name (a folder that is probably named the album)
-            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: file.parentFile.name
-            val albumArtist = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST) ?: "unknown"
+            val albumName = tag.getFirst(FieldKey.ALBUM)  ?: file.parentFile.name
+            val albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST)  ?: "unknown"
 
             song.artisName = artistName
             song.albumName = albumName
@@ -52,7 +59,7 @@ object SongsUtil {
             albumMap.getOrPut(albumName, { mutableListOf() }).add(song)
         }
 
-        dr.release()
+//        dr.release()
 
         for (entry in artistMap) {
             songsByArtistMap.put(entry.key, entry.value.toList())
@@ -161,7 +168,8 @@ object SongsUtil {
                     removableStoragePath = file.absolutePath
             }
 
-            removableStoragePath
+            if(removableStoragePath.isEmpty()) Environment.getExternalStorageDirectory().absolutePath
+            else removableStoragePath
         }
     }
 }
