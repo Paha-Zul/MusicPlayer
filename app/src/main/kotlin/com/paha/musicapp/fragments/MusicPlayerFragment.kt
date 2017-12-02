@@ -93,10 +93,11 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         }
 
         val favoriteButton = view.findViewById<ImageButton>(R.id.favorite_button)
-        val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
+        var isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
         val background = if(isFavorite) R.drawable.ic_favorite_white_48dp else R.drawable.ic_favorite_border_white_48dp
         favoriteButton.setBackgroundResource(background)
         favoriteButton.setOnClickListener {
+            isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
             if(isFavorite){
                 toggleFavoriteSong(view, false)
                 favoriteButton.setBackgroundResource(R.drawable.ic_favorite_border_white_48dp)
@@ -141,8 +142,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     fun playSong(songFile: SongInfo){
-
-//        PlaylistUtil.startPlaylist("all", shuffled)
+        currSongFile = songFile
 
         val attributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.USAGE_MEDIA)
@@ -153,7 +153,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mediaPlayer.reset()
 
         mediaPlayer.setAudioAttributes(attributes)
-        mediaPlayer.setDataSource(context, myUri)
+        mediaPlayer.setDataSource(parentContext, myUri) //We use the parent context because our context might be null when first starting
         mediaPlayer.prepare()
         mediaPlayer.start()
 
@@ -162,11 +162,9 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
             val playButton = view!!.findViewById<ImageButton>(R.id.togglePlay)
             playButton.setBackgroundResource(R.drawable.ic_pause_white)
         }
-
-        currSongFile = songFile
     }
 
-    private fun togglePlay(v:View):Unit{
+    private fun togglePlay(v:View){
         if(mediaPlayer.isPlaying) mediaPlayer.pause()
         else{
             val length = mediaPlayer.currentPosition

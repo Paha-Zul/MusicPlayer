@@ -22,7 +22,7 @@ class FavoriteSongsTab : Fragment(), SongDataLoaded{
     private lateinit var arrayAdapter: SongListAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = View.inflate(context, R.layout.songs_tab_1, null)
+        val view = View.inflate(context, R.layout.song_list_tab_1, null)
         return view
     }
 

@@ -1,5 +1,6 @@
 package com.paha.musicapp.tasks
 
+import android.app.Activity
 import android.content.Context
 import android.os.AsyncTask
 import com.paha.musicapp.interfaces.SongDataLoaded
@@ -12,7 +13,7 @@ class LoadSongsTask : AsyncTask<Any, String, List<SongInfo>>() {
     }
 
     override fun doInBackground(vararg params: Any?): List<SongInfo> {
-        val files = SongsUtil.loadAllSongs()
+        val files = SongsUtil.loadAllSongs(params[0] as Activity)
         SongsUtil.compileSongsIntoCategories()
         SongsUtil.loadFavoriteSongs(params[0] as Context)
         return files

@@ -1,17 +1,14 @@
 package com.paha.musicapp.util
 
+import android.app.Activity
 import android.content.Context
 import android.media.MediaMetadataRetriever
-import android.net.Uri
-import android.os.Environment
 import android.util.Log
 import com.paha.musicapp.objects.SongInfo
-import com.paha.musicapp.shuffle
 import java.io.*
-import android.os.Environment.getExternalStorageDirectory
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
-import org.jaudiotagger.tag.Tag
+import android.provider.MediaStore
 
 
 object SongsUtil {
@@ -22,44 +19,21 @@ object SongsUtil {
 
 
 
-    fun loadAllSongs():List<SongInfo>{
+    fun loadAllSongs(activity:Activity):List<SongInfo>{
         val files = findFiles(File(getStorage()))
-        allSongs = files
+        allSongs = getAllSongs(activity)
         return files
     }
 
     fun compileSongsIntoCategories(){
-//        val dr = MediaMetadataRetriever()
 
         val artistMap = hashMapOf<String, MutableList<SongInfo>>()
         val albumMap = hashMapOf<String, MutableList<SongInfo>>()
 
         allSongs.forEach { song ->
-            val audio = AudioFileIO.read(File(song.filePath))
-            val tag = audio.tag
-            val file = File(song.filePath)
-
-//            dr.setDataSource(song.filePath, hashMapOf())
-//            val artistName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: "unknown"
-//            //If we don't have an album name, use the parent's name (a folder that is probably named the album)
-//            val albumName = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: file.parentFile.name
-//            val albumArtist = dr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST) ?: "unknown"
-
-            val artistName = tag.getFirst(FieldKey.ARTIST) ?: "unknown"
-            //If we don't have an album name, use the parent's name (a folder that is probably named the album)
-            val albumName = tag.getFirst(FieldKey.ALBUM)  ?: file.parentFile.name
-            val albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST)  ?: "unknown"
-
-            song.artisName = artistName
-            song.albumName = albumName
-
-//            println("song: ${song.fileName}, artist: $artistName, albumName: $albumName, albumArtist: $albumArtist")
-
-            artistMap.getOrPut(artistName, { mutableListOf() }).add(song)
-            albumMap.getOrPut(albumName, { mutableListOf() }).add(song)
+            artistMap.getOrPut(song.artisName, { mutableListOf() }).add(song)
+            albumMap.getOrPut(song.albumName, { mutableListOf() }).add(song)
         }
-
-//        dr.release()
 
         for (entry in artistMap) {
             songsByArtistMap.put(entry.key, entry.value.toList())
@@ -139,8 +113,6 @@ object SongsUtil {
         return allSongs[index]
     }
 
-
-
     private fun findFiles(dir: File):List<SongInfo>{
         val children = dir.listFiles() ?: return listOf()
 
@@ -162,14 +134,47 @@ object SongsUtil {
         File("/storage/sdcard0/").exists() -> "/storage/sdcard0/"
         else -> {
             var removableStoragePath: String = ""
-            val fileList = File("/storage/").listFiles()
-            for (file in fileList) {
-                if (!file.absolutePath.equals(Environment.getExternalStorageDirectory().absolutePath, true) && file.isDirectory && file.canRead())
-                    removableStoragePath = file.absolutePath
-            }
-
-            if(removableStoragePath.isEmpty()) Environment.getExternalStorageDirectory().absolutePath
-            else removableStoragePath
+            File("/storage/").absolutePath
         }
+    }
+
+    private fun getAllSongs(activity:Activity) : List<SongInfo> {
+        val allsongsuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val selection = MediaStore.Audio.Media.IS_MUSIC + " != 0"
+
+        val songList: MutableList<SongInfo> = mutableListOf()
+//        val cursor = activity.managedQuery(allsongsuri, STAR, selection, null, null)
+        //or
+        val cursor = activity.contentResolver.query(allsongsuri, null, null, null, selection);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    val songName = cursor
+                            .getString(cursor
+                                    .getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
+                    val songID = cursor.getInt(cursor
+                            .getColumnIndex(MediaStore.Audio.Media._ID))
+
+                    val fullPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+                    val duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                    val album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
+                    val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+
+                    songList += SongInfo(fullPath, songName).apply {
+                        this.duration = duration
+                        this.albumName = album
+                        this.artisName = artist
+                    }
+
+//                    Log.e(TAG, "Song Name ::$songName Song Id :$songID fullpath ::$fullPath Duration ::$duration")
+
+                } while (cursor.moveToNext())
+
+            }
+            cursor.close()
+        }
+
+        return songList.toList()
     }
 }

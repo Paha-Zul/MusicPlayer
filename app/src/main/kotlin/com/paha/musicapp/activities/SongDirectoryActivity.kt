@@ -29,9 +29,10 @@ import com.paha.musicapp.fragments.*
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
 
-
+/**
+ * The main Activity when the app starts. This has a page viewer for the multiple tabs of the app.
+ */
 class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmentInteractionListener {
-
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -119,11 +120,9 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-
         return if (id == R.id.action_settings) {
             true
         } else super.onOptionsItemSelected(item)
-
     }
 
     override fun onFragmentInteraction(uri: Uri) {

@@ -25,7 +25,7 @@ class SongsByAlbumTab : Fragment(), SongDataLoaded{
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return View.inflate(context, R.layout.songs_artist_tab_2, null)
+        return View.inflate(context, R.layout.song_grouped_tab, null)
     }
 
     override fun onStart() {
