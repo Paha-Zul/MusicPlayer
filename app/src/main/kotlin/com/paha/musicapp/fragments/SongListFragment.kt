@@ -14,15 +14,17 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
 
-class AllSongsListTab : Fragment(), SongDataLoaded{
-    init{
+class SongListFragment(private val songList:List<SongInfo>) : Fragment(), SongDataLoaded {
+    init {
         LoadSongsTask.listeners += this
     }
+
+    constructor():this(listOf())
 
     private lateinit var arrayAdapter: SongListAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = View.inflate(context, R.layout.song_list_tab_1, null)
+        val view = View.inflate(context, R.layout.song_list_layout, null)
         return view
     }
 
@@ -33,13 +35,13 @@ class AllSongsListTab : Fragment(), SongDataLoaded{
     }
 
     override fun onSongDataLoaded(allSongs: List<SongInfo>, songsByArtist: HashMap<String, List<SongInfo>>, songsByAlbum: HashMap<String, List<SongInfo>>) {
-        if(allSongs.isEmpty() || view == null)
+        if (allSongs.isEmpty() || view == null)
             return
 
-        arrayAdapter = SongListAdapter(activity, fragmentManager, allSongs.toMutableList())
+        arrayAdapter = SongListAdapter(activity, fragmentManager, songList.toMutableList())
         val listView = view!!.findViewById<ListView>(R.id.all_songs_list_view)
         listView.adapter = arrayAdapter
 
-        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.GONE
+//        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.GONE
     }
 }

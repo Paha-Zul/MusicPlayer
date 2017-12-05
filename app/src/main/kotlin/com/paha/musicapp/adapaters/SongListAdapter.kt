@@ -70,14 +70,14 @@ class SongListAdapter(val parentContext:Context, private val fragmentManager:Fra
 //            val firstVisible = listView.firstVisiblePosition
 //            Log.e("TAG", "Animating item no: " + position)
 //            animationStates[position] = true
-//            val animation = AnimationUtils.loadAnimation(context, R.anim.abc_slide_in_bottom)
+//            val animation = AnimationUtils.loadAnimation(parentContext, R.anim.abc_slide_in_bottom)
 //            animation.startOffset = (position - firstVisible)*100L
 //            convertView.startAnimation(animation)
 //        }
 
-//        val animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
+//        val animation = AnimationUtils.loadAnimation(parentContext, android.R.anim.slide_in_left)
 //        animation.startOffset = position * 100L
-//        convertView.startAnimation(AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left))
+//        convertView.startAnimation(AnimationUtils.loadAnimation(parentContext, android.R.anim.slide_in_left))
 
         // Return the completed view to render on screen
         return convertView

@@ -15,8 +15,6 @@ import com.paha.musicapp.util.PlaylistUtil
 class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, private val context:Context, private val songData: SongInfo) : View.OnClickListener {
 
     override fun onClick(v: View) {
-        println("Hey whats up")
-
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         val format = MusicPlayerFragment.format

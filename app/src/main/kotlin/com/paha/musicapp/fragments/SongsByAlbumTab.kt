@@ -44,7 +44,7 @@ class SongsByAlbumTab : Fragment(), SongDataLoaded{
         keyList.forEach { key ->
             list += Pair(key, SongsUtil.songsByAlbumMap[key]!!)
         }
-        val adapter = SongAlbumAdapter(activity, list)
+        val adapter = SongAlbumAdapter(activity, list, fragmentManager)
         listView.adapter = adapter
         view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.GONE
     }

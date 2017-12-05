@@ -153,7 +153,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mediaPlayer.reset()
 
         mediaPlayer.setAudioAttributes(attributes)
-        mediaPlayer.setDataSource(parentContext, myUri) //We use the parent context because our context might be null when first starting
+        mediaPlayer.setDataSource(parentContext, myUri) //We use the parent parentContext because our parentContext might be null when first starting
         mediaPlayer.prepare()
         mediaPlayer.start()
 
