@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.ProgressBar
 import com.paha.musicapp.R
 import com.paha.musicapp.adapaters.SongListAdapter
 import com.paha.musicapp.interfaces.SongDataLoaded
@@ -30,7 +29,7 @@ class SongListFragment(private val songList:List<SongInfo>) : Fragment(), SongDa
 
     override fun onStart() {
         super.onStart()
-        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.VISIBLE
+//        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.VISIBLE
         onSongDataLoaded(SongsUtil.allSongs, SongsUtil.songsByArtistMap, SongsUtil.songsByAlbumMap)
     }
 

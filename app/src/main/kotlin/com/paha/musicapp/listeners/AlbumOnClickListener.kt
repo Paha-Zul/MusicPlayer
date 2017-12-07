@@ -14,6 +14,7 @@ class AlbumOnClickListener(private val fragmentManager: FragmentManager, private
         val fragment = SongListFragment(songs)
 
         fragmentTransaction.replace(R.id.overlay_container, fragment)
+        fragmentTransaction.addToBackStack("")
         fragmentTransaction.commit()
     }
 }

@@ -61,13 +61,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/overlay_container">
-
-        </FrameLayout>
     </android.support.v4.view.ViewPager>
 
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/overlay_container">
+    </FrameLayout>
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

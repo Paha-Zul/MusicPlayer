@@ -1,15 +1,18 @@
 package com.paha.musicapp.adapaters
 
 import android.content.Context
+import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.paha.musicapp.R
+import com.paha.musicapp.listeners.AlbumOnClickListener
 import com.paha.musicapp.objects.SongInfo
 
-class SongArtistAdapter(val context:Context, val list:List<Pair<String, List<SongInfo>>>) : BaseAdapter() {
+class SongArtistAdapter(private val parentContext:Context, private val fragmentManager: FragmentManager,
+                        private val list:List<Pair<String, List<SongInfo>>>) : BaseAdapter() {
     private var lastPosition:Int = 0
 
     private class ViewHolder {
@@ -34,7 +37,7 @@ class SongArtistAdapter(val context:Context, val list:List<Pair<String, List<Son
         if (convertView == null) {
 
             viewHolder = ViewHolder()
-            val inflater = LayoutInflater.from(context)
+            val inflater = LayoutInflater.from(parentContext)
             convertView = inflater.inflate(R.layout.song_artist_layout, parent, false)
 
             viewHolder.artistName = convertView.findViewById(R.id.artist_name)
@@ -49,8 +52,10 @@ class SongArtistAdapter(val context:Context, val list:List<Pair<String, List<Son
         viewHolder.artistName.text = dataModel.first
         viewHolder.songAmount.text = dataModel.second.size.toString()
 
+        convertView!!.setOnClickListener(AlbumOnClickListener(fragmentManager, parentContext, dataModel.second))
+
         // Return the completed view to render on screen
-        return convertView!!
+        return convertView
     }
 
     override fun getItem(position: Int): Any {

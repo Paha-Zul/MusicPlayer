@@ -194,4 +194,12 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
             return null
         }
     }
+
+    override fun onBackPressed() {
+        if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

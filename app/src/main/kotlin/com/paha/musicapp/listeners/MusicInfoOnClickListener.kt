@@ -44,7 +44,7 @@ class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, priv
             handler.postDelayed(runnable, 500)
         })
 
-        PlaylistUtil.FindSongAndSetPlaylistIndex(songData.songName, "all", fragment.shuffled)
+        PlaylistUtil.FindSongAndSetPlaylistIndex(songData.songName, "all", MusicPlayerFragment.shuffled)
         fragment.playSong(songData)
 
         fragmentTransaction.replace(R.id.music_player_container, fragment)

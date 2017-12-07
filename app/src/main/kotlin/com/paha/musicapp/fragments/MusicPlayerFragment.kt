@@ -36,8 +36,6 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
 
     private var mListener: OnFragmentInteractionListener? = null
 
-    var shuffled = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -84,6 +82,9 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         }
 
         val shuffleButton = view.findViewById<ImageButton>(R.id.shuffle_playlist)
+        if(shuffled)
+            shuffleButton.backgroundTintList = ContextCompat.getColorStateList(context, R.color.maroon)
+
         shuffleButton.setOnClickListener {
             shuffled = !shuffled
             if(shuffled)
@@ -218,6 +219,8 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
+
+        var shuffled = false
 
         /**
          * Use this factory method to create a new instance of
