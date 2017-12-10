@@ -17,8 +17,6 @@ object SongsUtil {
     var songsByAlbumMap:HashMap<String, List<SongInfo>> = hashMapOf()
     var favoriteSongs:MutableList<SongInfo> = mutableListOf()
 
-
-
     fun loadAllSongs(activity:Activity):List<SongInfo>{
         val files = findFiles(File(getStorage()))
         allSongs = getAllSongs(activity)

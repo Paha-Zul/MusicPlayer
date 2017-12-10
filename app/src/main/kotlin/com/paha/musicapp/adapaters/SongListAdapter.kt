@@ -61,7 +61,7 @@ class SongListAdapter(val parentContext:Context, private val fragmentManager:Fra
         lastPosition = position
 
         viewHolder.songName.text = dataModel.songName
-        viewHolder.songTime.text = "3:20"
+        viewHolder.songTime.text = dataModel.duration.toString()
 
         convertView!!.setOnClickListener(MusicInfoOnClickListener(fragmentManager, parentContext, dataModel))
 

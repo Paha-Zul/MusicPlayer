@@ -20,7 +20,7 @@ object PlaylistUtil {
             startPlaylist(playlistName, shuffled)
             currPlaylist.currSongIndex = currPlaylist.playlist.indexOfFirst { it.songName == songName }
         }
-
+        //TODO Maybe handle going back to the start of the song here when going backwards? Within 5 seconds of the start perhaps?
         var nextIndex = if(previous) --currPlaylist.currSongIndex else ++currPlaylist.currSongIndex
         nextIndex = Util.mod(nextIndex, currPlaylist.playlist.size)
         return currPlaylist.playlist[nextIndex]
