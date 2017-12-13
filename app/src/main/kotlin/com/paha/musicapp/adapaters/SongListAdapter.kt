@@ -14,6 +14,7 @@ import com.paha.musicapp.R
 import com.paha.musicapp.fragments.MusicPlayerFragment
 import com.paha.musicapp.listeners.MusicInfoOnClickListener
 import com.paha.musicapp.objects.SongInfo
+import com.paha.musicapp.util.Util
 
 
 class SongListAdapter(val parentContext:Context, private val fragmentManager:FragmentManager, val data:MutableList<SongInfo>)
@@ -61,7 +62,7 @@ class SongListAdapter(val parentContext:Context, private val fragmentManager:Fra
         lastPosition = position
 
         viewHolder.songName.text = dataModel.songName
-        viewHolder.songTime.text = dataModel.duration.toString()
+        viewHolder.songTime.text = Util.convertMilliToFormattedTime(dataModel.duration)
 
         convertView!!.setOnClickListener(MusicInfoOnClickListener(fragmentManager, parentContext, dataModel))
 
@@ -103,9 +104,6 @@ class SongListAdapter(val parentContext:Context, private val fragmentManager:Fra
         val fragment = MusicPlayerFragment()
         fragmentTransaction.add(R.id.all_songs_list_view, fragment)
         fragmentTransaction.commit()
-
-        println("Hi2")
-
     }
 
     override fun getFilter(): Filter {

@@ -1,6 +1,7 @@
 package com.paha.musicapp.listeners
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.view.View
@@ -11,13 +12,13 @@ import com.paha.musicapp.R
 import com.paha.musicapp.activities.SongDirectoryActivity
 import com.paha.musicapp.fragments.MusicPlayerFragment
 import com.paha.musicapp.util.PlaylistUtil
+import com.paha.musicapp.util.Util
 
 class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, private val context:Context, private val songData: SongInfo) : View.OnClickListener {
 
     override fun onClick(v: View) {
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val format = MusicPlayerFragment.format
         val mediaPlayer = MusicPlayerFragment.mediaPlayer
 
         val fragment = SongDirectoryActivity.musicPlayerFragment ?: MusicPlayerFragment(context, { fragmentView ->
@@ -33,11 +34,12 @@ class MusicInfoOnClickListener(private val fragmentManager:FragmentManager, priv
             var runnable: () -> Unit = {}
 
             runnable = {
-                val currentTime = "${(mediaPlayer.currentPosition / 60000)}:${format.format((mediaPlayer.currentPosition % 60000) / 1000)}"
-                val maxTime = "${(mediaPlayer.duration / 60000)}:${format.format((mediaPlayer.duration % 60000) / 1000)}"
+                val currentTime = Util.convertMilliToFormattedTime(mediaPlayer.currentPosition)
+                val maxTime = Util.convertMilliToFormattedTime(mediaPlayer.duration)
                 songTime.text = "$currentTime / $maxTime"
                 songSeek.progress = ((mediaPlayer.currentPosition.toFloat() / mediaPlayer.duration.toFloat()) * 100f).toInt()
                 handler.postDelayed(runnable, 500)
+                songData.currTime = mediaPlayer.currentPosition
                 Unit
             }
 

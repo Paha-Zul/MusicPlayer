@@ -2,12 +2,9 @@ package com.paha.musicapp.util
 
 import android.app.Activity
 import android.content.Context
-import android.media.MediaMetadataRetriever
 import android.util.Log
 import com.paha.musicapp.objects.SongInfo
 import java.io.*
-import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.tag.FieldKey
 import android.provider.MediaStore
 
 
@@ -131,19 +128,18 @@ object SongsUtil {
         File("/storage/usbcard1/").exists() -> "/storage/usbcard1/"
         File("/storage/sdcard0/").exists() -> "/storage/sdcard0/"
         else -> {
-            var removableStoragePath: String = ""
             File("/storage/").absolutePath
         }
     }
 
     private fun getAllSongs(activity:Activity) : List<SongInfo> {
-        val allsongsuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val allSongsURI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + " != 0"
 
         val songList: MutableList<SongInfo> = mutableListOf()
 //        val cursor = activity.managedQuery(allsongsuri, STAR, selection, null, null)
         //or
-        val cursor = activity.contentResolver.query(allsongsuri, null, null, null, selection);
+        val cursor = activity.contentResolver.query(allSongsURI, null, null, null, selection);
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {

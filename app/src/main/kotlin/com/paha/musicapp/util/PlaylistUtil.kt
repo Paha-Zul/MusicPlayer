@@ -15,10 +15,10 @@ object PlaylistUtil {
 
     private var currPlaylist = PlayList()
 
-    fun getNextSongInPlaylist(songName:String, playlistName:String, shuffled:Boolean, previous:Boolean):SongInfo{
+    fun getNextSongInPlaylist(songFile:SongInfo, playlistName:String, shuffled:Boolean, previous:Boolean):SongInfo{
         if(currPlaylist.name != playlistName || currPlaylist.shuffled != shuffled){
             startPlaylist(playlistName, shuffled)
-            currPlaylist.currSongIndex = currPlaylist.playlist.indexOfFirst { it.songName == songName }
+            currPlaylist.currSongIndex = currPlaylist.playlist.indexOfFirst { it.songName == songFile.songName }
         }
         //TODO Maybe handle going back to the start of the song here when going backwards? Within 5 seconds of the start perhaps?
         var nextIndex = if(previous) --currPlaylist.currSongIndex else ++currPlaylist.currSongIndex
