@@ -116,7 +116,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
 
         mediaPlayer.setOnCompletionListener {
             //TODO Don't leave "all" here. Find a way to differentiate playlists
-            val song = PlaylistUtil.getNextSongInPlaylist(currSongFile, "all", shuffled, false)
+            val song = PlaylistUtil.getNextSongInPlaylist(currSongFile, "all", shuffled)
             playSong(song)
         }
     }
@@ -181,7 +181,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     private fun previousSong(v:View){
-        val newSong = PlaylistUtil.getNextSongInPlaylist(currSongFile, "all", shuffled, true)
+        val newSong = PlaylistUtil.getPreviousSongInPlaylist(currSongFile, "all", shuffled)
         playSong(newSong)
     }
 
@@ -193,7 +193,7 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
     }
 
     private fun nextSong(v:View){
-        val newSong = PlaylistUtil.getNextSongInPlaylist(currSongFile, "all", shuffled, false)
+        val newSong = PlaylistUtil.getNextSongInPlaylist(currSongFile, "all", shuffled)
         playSong(newSong)
     }
 
