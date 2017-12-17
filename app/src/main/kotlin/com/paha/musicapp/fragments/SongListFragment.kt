@@ -1,10 +1,13 @@
 package com.paha.musicapp.fragments
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ListView
 import com.paha.musicapp.R
 import com.paha.musicapp.adapaters.SongListAdapter
@@ -13,7 +16,7 @@ import com.paha.musicapp.objects.SongInfo
 import com.paha.musicapp.tasks.LoadSongsTask
 import com.paha.musicapp.util.SongsUtil
 
-class SongListFragment(private val songList:List<SongInfo>) : Fragment(), SongDataLoaded {
+class SongListFragment(private val songList:List<SongInfo>, private val tmp:Boolean = false, private val parentContext:Context? = null) : Fragment(), SongDataLoaded {
     init {
         LoadSongsTask.listeners += this
     }
@@ -42,5 +45,13 @@ class SongListFragment(private val songList:List<SongInfo>) : Fragment(), SongDa
         listView.adapter = arrayAdapter
 
 //        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.GONE
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        if(tmp){
+            (parentContext!! as Activity).findViewById<ImageButton>(R.id.back_button).visibility = View.INVISIBLE
+        }
     }
 }

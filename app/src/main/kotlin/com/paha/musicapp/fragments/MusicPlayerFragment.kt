@@ -142,6 +142,20 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
         mListener = null
     }
 
+    /**
+     * Makes sure that the images on things like the favorite heart and shuffled mode are correct between songs
+     */
+    private fun setButtonImages(){
+        val shuffleButton = view!!.findViewById<ImageButton>(R.id.shuffle_playlist)
+        if(shuffled)
+            shuffleButton.backgroundTintList = ContextCompat.getColorStateList(context, R.color.maroon)
+
+        val favoriteButton = view!!.findViewById<ImageButton>(R.id.favorite_button)
+        val isFavorite = SongsUtil.favoriteSongs.firstOrNull { it.songName == currSongFile.songName } != null
+        val background = if(isFavorite) R.drawable.ic_favorite_white_48dp else R.drawable.ic_favorite_border_white_48dp
+        favoriteButton.setBackgroundResource(background)
+    }
+
     fun playSong(songFile: SongInfo){
         currSongFile = songFile
         songFile.currTime = 0
@@ -164,6 +178,8 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
             val playButton = view!!.findViewById<ImageButton>(R.id.togglePlay)
             playButton.setBackgroundResource(R.drawable.ic_pause_white)
         }
+
+        setButtonImages()
     }
 
     private fun togglePlay(v:View){
