@@ -30,6 +30,15 @@ class SongListFragment(private val songList:List<SongInfo>, private val tmp:Bool
         return view
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if(tmp) {
+            (parentContext as Activity).findViewById<ImageButton>(R.id.back_button).setOnClickListener {
+                fragmentManager.popBackStack()
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 //        view!!.findViewById<ProgressBar>(R.id.progress_loader).visibility = View.VISIBLE

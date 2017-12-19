@@ -102,13 +102,6 @@ class SongDirectoryActivity : AppCompatActivity(), MusicPlayerFragment.OnFragmen
 //        }
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        //TODO Add a back button listener here
-//        activity
-    }
-
     override fun onPause() {
         super.onPause()
 

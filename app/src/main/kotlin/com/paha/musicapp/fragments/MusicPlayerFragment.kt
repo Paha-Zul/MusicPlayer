@@ -146,6 +146,9 @@ class MusicPlayerFragment(private val parentContext:Context?, private val onCrea
      * Makes sure that the images on things like the favorite heart and shuffled mode are correct between songs
      */
     private fun setButtonImages(){
+        if(view == null)
+            return
+
         val shuffleButton = view!!.findViewById<ImageButton>(R.id.shuffle_playlist)
         if(shuffled)
             shuffleButton.backgroundTintList = ContextCompat.getColorStateList(context, R.color.maroon)
